@@ -1,0 +1,173 @@
+
+from tkinter import *
+import mysql.connector
+
+mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="dbproject")
+
+print(mydb)
+
+if(mydb):
+    print("Connection successfull")
+
+else:
+    print("Connection unsuccessfull")
+
+mycursor=mydb.cursor()
+
+
+#mycursor.execute("Create table addresses(first_name text,last_name text,address text , city text , state text , zipcode int)")
+mycursor.execute("show tables")
+for db in mycursor: 
+    print(db)
+
+
+
+# Tk, Label
+root = Tk()
+root.title('DBMS MINI PROJECT')
+root.geometry("800x800")
+
+#create a submit function into the database 
+
+def insert():
+
+    #to add data into the database we need to also add the creation of the database part ito the function
+
+    mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="dbproject")
+    mycursor=mydb.cursor()
+
+    #insert into the table 
+    f_name_label=f_name.get()
+    l_name_label=l_name.get()
+    address_label=address.get()
+    city_label=city.get()
+    state_label=state.get()
+    zipcode_label=zipcode.get()
+
+    mycursor.execute("insert into addresses values('"+f_name_label + "' , '"+l_name_label + "' , '"+address_label + "',  '"+city_label + "','"+state_label + "'  ,'"+zipcode_label + "')")
+    mydb.commit()
+    mydb.close()
+    #clear the text boxes
+    f_name.delete(0,END)
+    l_name.delete(0,END)
+    address.delete(0,END)
+    city.delete(0,END)
+    state.delete(0,END)
+    zipcode.delete(0,END)
+
+
+def delete():
+
+     #delete from the table 
+    f_name_label=f_name.get()
+    mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="dbproject")
+    mycursor=mydb.cursor()
+
+    #execute the query
+
+    mycursor.execute("delete from addresses  where f_name='"+f_name.get()+"'")
+    f_name.delete(0,END)
+    l_name.delete(0,END)
+    address.delete(0,END)
+    city.delete(0,END)
+    state.delete(0,END)
+    zipcode.delete(0,END)
+    mydb.commit()
+    mydb.close()
+    
+#     f_name.delete(0,END)
+#     l_name.delete(0,END)
+#     address.delete(0,END)
+#     city.delete(0,END)
+#     state.delete(0,END)
+#     zipcode.delete(0,END)
+
+# def update():
+    
+#      #insert into the table 
+
+#     mydb.commit()
+#     mydb.close()
+
+#     #clear the text boxes
+#     f_name.delete(0,END)
+#     l_name.delete(0,END)
+#     address.delete(0,END)
+#     city.delete(0,END)
+#     state.delete(0,END)
+#     zipcode.delete(0,END)
+
+
+# def get():
+    
+#      #insert into the table 
+
+#     mydb.commit()
+#     mydb.close()
+
+#     #clear the text boxes
+#     f_name.delete(0,END)
+#     l_name.delete(0,END)
+#     address.delete(0,END)
+#     city.delete(0,END)
+#     state.delete(0,END)
+#     zipcode.delete(0,END)
+    
+#create text box
+
+f_name = Entry(root,width=30)
+f_name.grid(row=0,column=1,padx=20)
+
+l_name = Entry(root,width=30)
+l_name.grid(row=1,column=1)
+
+address = Entry(root,width=30)
+address.grid(row=2,column=1)
+
+city = Entry(root,width=30)
+city.grid(row=3,column=1)
+
+state = Entry(root,width=30)
+state.grid(row=4,column=1)
+
+zipcode = Entry(root,width=30)
+zipcode.grid(row=5,column=1)
+
+#create text box labels
+
+f_name_label=Label(root , text="Firstname")
+f_name_label.grid(row=0,column=0)
+
+
+l_name_label=Label(root , text="Lastname")
+l_name_label.grid(row=1,column=0)
+
+address_label=Label(root , text="address")
+address_label.grid(row=2,column=0)
+
+city_label=Label(root , text="city")
+city_label.grid(row=3,column=0)
+
+state_label=Label(root , text="state")
+state_label.grid(row=4,column=0)
+
+zipcode_label=Label(root , text="zipcode")
+zipcode_label.grid(row=5,column=0)
+
+# create a submit button
+
+insert = Button(root , text="insert" , command=insert)
+insert.grid(row=6,column=0,columnspan=2,pady=10,padx=10,ipadx=100)
+
+delete = Button(root , text="Delete record from the database" , command=delete)
+delete.grid(row=7,column=0,columnspan=2,pady=10,padx=10,ipadx=100)
+
+# update = Button(root , text="Update record into the database" , command=update)
+# update.grid(row=6,column=0,columnspan=2,pady=10,padx=10,ipadx=100)
+
+# get = Button(root , text="Fetch record from the database" , command=get)
+# get.grid(row=6,column=0,columnspan=2,pady=10,padx=10,ipadx=100)
+
+root.mainloop()
+
+
